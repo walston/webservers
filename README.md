@@ -12,16 +12,23 @@
 
 ## 02 - HTTP Framework: Polka
 
+Polka is a minimal express.js (an older, more established alternative) style webserver framework.
+[polka](https://www.npmjs.com/package/polka)
+
 1. Install Polka
 2. Instantiate an HTTP server using Polka
 3. Respond to requests with an HTML "Hello World"
 
 ## 03 - Static Assets
 
+Sirv is a minimal static-asset middleware server for express-like webserver frameworks. It's produced by the same developer as `polka`
+[sirv](https://www.npmjs.com/package/sirv)
+
 1. Create a new Polka app
 2. Create a basic HTML webpage in `/public`
-3. Mount `/public` to a webserver app to be served at the `/` level
-4. Go to
+3. Use `sirv` to create a static-asset middleware for the `public` folder
+4. Pass the `sirv` middleware into your `app` via `app.use`
+5. Go to your webserver in a browser
 
 ## 04 - Middleware
 
