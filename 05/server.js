@@ -14,10 +14,12 @@ function logger(req, res, next) {
 }
 
 app.use(logger);
+/** @NOTE this function handler will only be triggered on "GET /" http requests */
 app.get("/", function (req, res) {
   console.log("Received a GET request for '/'");
   res.end("Ok");
 });
+/** @NOTE this function handler will only be triggered on "POST /" http requests */
 app.post("/", function (req, res) {
   console.log("Received a POST request for '/'");
   res.end("Ok");
