@@ -76,7 +76,7 @@ The document has moved
 
 Above we have `>` lines showing the request we've sent and `<` lines showing the response back. Below is an image showing what the different parts of the request are.
 
-![http diagram][./pics/http-request.png]
+![http diagram](pics/http-request.png)
 
 ## 05 - HTTP Verbs
 
@@ -97,8 +97,8 @@ Take note of the fact that handlers for different http methods are not executed 
 
 ### Further Reading
 
-[MDN: HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-[w3schools: HTTP Methods](https://www.w3schools.com/tags/ref_httpmethods.asp)
+- [MDN: HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+- [w3schools: HTTP Methods](https://www.w3schools.com/tags/ref_httpmethods.asp)
 
 ## 06 - Request Body / Server Data
 
