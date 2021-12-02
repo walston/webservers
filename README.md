@@ -3,7 +3,7 @@
 ## 00 - Prerequisites
 
 1. Install Homebrew: https://brew.sh
-2. Install `httpie`: `brew install `httpie``
+2. Install `httpie`: `brew install httpie`
 
 ## 01 - Node Standard-Library packages
 
