@@ -130,7 +130,7 @@ To handle request bodies we include simply need another middleware, called a **b
 
 I've opted for `text/plain` in this lesson so that we don't need to create JSON manually. `httpie` supports sending files instead of `--raw` so make a .json file, change the body parser to `json()` instead of `text()` and send a fancier request body.
 
-## 07 - Dynamic routing
+## XX - Dynamic routing
 
 // About request parameters
 
@@ -140,7 +140,7 @@ I've opted for `text/plain` in this lesson so that we don't need to create JSON 
    2. Respond with the provided `name` and `location` fields
 3. Using `httpie` test your endpoint `/api/:name/:location` by replacing `:name` with your name and `:location` with your own.
 
-## 08 - Response Codes
+## XX - Response Codes
 
 // About HTTP Response Codes
 [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
@@ -152,7 +152,7 @@ I've opted for `text/plain` in this lesson so that we don't need to create JSON 
 3. in your `GET /api/:name` handler:
    1. Respond with `404 Not Found` if `req.params.name` is not in the USERS collection
 
-## 08 - Client / Server interaction
+## XX - Client / Server interaction
 
 1. Setup a static asset server using Polka
 2. Add 4 anchor-tag links to the HTML document body:
@@ -162,7 +162,7 @@ I've opted for `text/plain` in this lesson so that we don't need to create JSON 
 5. Respond with `{ q: ___ }` replacing `___` with your local variable name
 6. Go to your page in a browser and click the links
 
-## 09 - Client / Server interaction with `fetch`
+## XX - Client / Server interaction with `fetch`
 
 1. Create a new Polka app Static Asset Server
    1. Add a new HTML document with only a script:src tag to your `/public` folder
