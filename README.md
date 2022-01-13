@@ -100,7 +100,31 @@ Take note of the fact that handlers for different http methods are not executed 
 - [MDN: HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 - [w3schools: HTTP Methods](https://www.w3schools.com/tags/ref_httpmethods.asp)
 
-## 06 - Request Body / Server Data
+## 06 - Request Bodies
+
+HTTP Requests can have a **request body** of arbitrary text sent with the request, although by convention certain verbs do not. Because the body of a request can contain _any_ text (even binary data) the request's headers ought to include a `Content-Type` specifying what is called a **MIME-type**, this is a string that looks something like `___/___`. Some of the most common MIME-types are `application/x-www-form-urlencoded`, `application/json` and `text/plain`, and in our JavaScript servers, by far the most common would be `application/json`.
+
+To handle request bodies we include simply need another middleware, called a **body-parser**. The parser translates the HTTP request body, which is in a type analogous to a string called a `Buffer`, into a native JavaScript object and attaches it to our `req` argument then passed into our routing handlers. The most well-established package for this is the obviously named `body-parser` so let's install that as well as `polka`.
+
+1. Create a new Polka app
+2. require the `body-parser` package and use the `json` middleware [documented here](https://www.npmjs.com/package/body-parser#bodyparsertextoptions)
+3. Pass the json body-parser into `app.use` as middleware
+4. Create a logger middleware function
+   - The arguments a middleware receives are a Request object `req`, a Response object `res`, and a callback to call the next middleware `next`.
+   - The concept of middleware expects us to expand upon either the request or response object
+   - log the request object's `method`, `url` and `body` properties
+5. Pass the logger middleware into app.use _after_ the body-parser (this way it receives the `req` object that has already been modified by json-body-parser)
+6. Using httpie send some POST requests with data
+   - `http POST localhost:8080/ hello=world`
+   - `http POST localhost:8080/hello to_who=world`
+
+## 07 - Persisting Data
+
+## 08 - Responding with Data
+
+(e.g. CRUD)
+
+## 09 - Responding with Granular Data
 
 There is a concept in data management, CRUD, that describes the 4 basic functions a data-model _could_ implement for storage _at most_: Create, Read, Update, Delete. Historically, HTTP api engineers have mapped these functions 1-to-1 with HTTP methods: GET=read, POST=create, PUT=update, and DELETE=delete. There's nothing forcing this match up, and as you can see in the official docs there are a lot more http methods than CRUD can account for but being aware of this match up can help you understand what other api designers are thinking, so I would recommend committing the associate to memory.
 
@@ -112,27 +136,32 @@ To handle request bodies we include simply need another middleware, called a **b
 2. Create logger middleware
 3. Add the body-parser `text` middleware [documented here](https://www.npmjs.com/package/body-parser#bodyparsertextoptions)
 4. Add a USERS collection (Just an array of names as strings)
-5. Add a `POST` handler for `/user`
+5. Add a `POST` handler for `/users`
    1. Save the `req.body` to the USERS collection
    2. Respond with the user's name and array index as fields in an object
    3. Hint: `.push()` returns the index
-6. Add a `GET` handler for `/user`
+6. Add a `GET` handler for `/users`
    1. Respond with the array of USERS
 7. Test your api with `httpie`
    1. Send a GET request with `httpie`
-      - `http localhost:8080/user`
+      - `http localhost:8080/users`
    2. Send a POST request with `httpie` with a new name as the body
-      - `http POST localhost:8080/user Content-Type:text/plain --raw=Jack`
+      - `http POST localhost:8080/users user=Nathan`
    3. Send another GET request
-      - `http localhost:8080/user`
+      - `http localhost:8080/users`
+
+### Note
+
+Route design isn't an exact science, but one of the most common api routing design-patterns is called REST, where you map data-objects to routes. If you want to read more on API design, Google apigee has a great book on best practices at [Web API Design: The Missing Link (PDF)](https://cloud.google.com/files/apigee/apigee-web-api-design-the-missing-link-ebook.pdf).
 
 ### Play around
 
 I've opted for `text/plain` in this lesson so that we don't need to create JSON manually. `httpie` supports sending files instead of `--raw` so make a .json file, change the body parser to `json()` instead of `text()` and send a fancier request body.
+`httpie` sends POST requests as json by default, but supports other formats as well. Check out the `body-parser`'s other middlewares and try sending plain text & handling that.
 
-## XX - Dynamic routing
+## 07 - Route Parameters
 
-// About request parameters
+Routing frameworks generally support _route params_ to help you as an engineer handle more requests dynamically. In our previous lesson we began storing users in an array data-structure, but so far we have no way of looking aa single user's data
 
 1. Create a new Polka app
 2. Handle requests to `/api/:name/:location`

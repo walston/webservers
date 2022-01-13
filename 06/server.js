@@ -1,6 +1,6 @@
 const polka = require("polka");
 /** @NOTE Some packages include several exports at the top level, like this. */
-const textBodyParser = require("body-parser").text();
+const jsonBodyParser = require("body-parser").json();
 
 /////////////// GLOBALS ///////////////
 const app = polka();
@@ -8,7 +8,11 @@ const app = polka();
  * @NOTE
  * this is considered an "in-memory" dataset, definitely not scalable but
  * it works for this example case */
-const USERS = ["Huey", "Dewey", "Louis"];
+const USERS = [
+  { name: "Huey", id: "001" },
+  { name: "Dewey", id: "002" },
+  { name: "Louis", id: "003" },
+];
 
 /////////////// APP LOGIC ///////////////
 /**
@@ -18,15 +22,17 @@ const USERS = ["Huey", "Dewey", "Louis"];
  * If we were to put our logger middleware before textBodyParser `req.body`
  * would be undefined as it is by default. textBodyParser adds `req.body` to
  * the `req` object and would not exist otherwise. */
-app.use(textBodyParser, function (req, res, next) {
+app.use(jsonBodyParser, function (req, res, next) {
   console.log(req.method, req.url, req.body);
   next();
 });
-app.post("/user", function (req, res) {
+app.post("/users", function (req, res) {
   USERS.push(req.body);
   res.end("Ok");
+
+  console.log(USERS);
 });
-app.get("/user", function (req, res) {
+app.get("/users", function (req, res) {
   res.end(USERS.toString());
 });
 
