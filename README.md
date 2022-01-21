@@ -120,35 +120,45 @@ To handle request bodies we include simply need another middleware, called a **b
 
 ## 07 - Persisting Data
 
+Now that we can read request bodies, we should be able to persist them on the server.
+
+1. Create a new Polka app.
+2. Include the `body-parser` from the previous lesson
+3. Create a request handler function
+   - Receives both the `req` and `res` arguments provided to middlewares
+   - Read `req.body` and save it to some global variable in your application.
+   - Will respond with `Ok` if `res.end()` is called
+   - If you do not call `res.end()` the request will hang forever.
+4. Pass your request handler function into `app.post("/hello", handler)` to have it respond to requests to `localhost:8080/hello`
+5. Use httpie to send some post requests to `localhost:8080/hello`
+   - `http POST localhost:8080/hello a=foo b=bar c=baz`
+
 ## 08 - Responding with Data
 
-(e.g. CRUD)
-
-## 09 - Responding with Granular Data
+Now that you have data saved in a global variable, it should be straightforward to resond with the list. Let's build a simple application that handles "Users".
 
 There is a concept in data management, CRUD, that describes the 4 basic functions a data-model _could_ implement for storage _at most_: Create, Read, Update, Delete. Historically, HTTP api engineers have mapped these functions 1-to-1 with HTTP methods: GET=read, POST=create, PUT=update, and DELETE=delete. There's nothing forcing this match up, and as you can see in the official docs there are a lot more http methods than CRUD can account for but being aware of this match up can help you understand what other api designers are thinking, so I would recommend committing the associate to memory.
 
-With that knowledge, specifically that POST and PUT are meant to save data, we need to have that data in the request, that is what the **request body** is for. Unfortunately for us, there are literally countless ways for the request body to be formatted, it could be literally anything, so typically a header is included specifying a **MIME-type** (something that looks like `___/___`). The most common MIME-types are `application/x-www-form-urlencoded`, `application/json` and `text/plain`, and in our JavaScript servers, by far the most common would be `application/json`.
+1. Create a new Polka app.
+2. Include `body-parser`
+3. Create a global `Map` object called `users`
+4. Define a request handler function that reads a user off the request body and saves it to the global `users` object, named `createUser`
+   - Expect an `id` field to exist on the request body, 
+5. Attach the `createUser` handler to `app.post("/users", createUser)`
+6. Define a request handler function that responds to a request with an array of all users in the global `users` object
+7. Attach the `getUsers` handler to `app.get("/users", getUsers)`
+8. Play around with it, sending new users and checking the responses
+   - `http POST localhost:8080/users id=001 name=Nathan password=idi0t`
+   - `http POST localhost:8080/users id=002 name=Nikki password=s.m.r.t.`
+   - `http GET localhost:8080/users`
 
-To handle request bodies we include simply need another middleware, called a **body-parser**, that parses the request body into javascript and attaches it to our `req` argument in our routing handlers. The most well-established package for this is the obviously named `body-parser` so let's install that as well as `polka`.
+## 09 - Responding with Granular Data
 
-1. Create a new Polka app
-2. Create logger middleware
-3. Add the body-parser `text` middleware [documented here](https://www.npmjs.com/package/body-parser#bodyparsertextoptions)
-4. Add a USERS collection (Just an array of names as strings)
-5. Add a `POST` handler for `/users`
-   1. Save the `req.body` to the USERS collection
-   2. Respond with the user's name and array index as fields in an object
-   3. Hint: `.push()` returns the index
-6. Add a `GET` handler for `/users`
-   1. Respond with the array of USERS
-7. Test your api with `httpie`
-   1. Send a GET request with `httpie`
-      - `http localhost:8080/users`
-   2. Send a POST request with `httpie` with a new name as the body
-      - `http POST localhost:8080/users user=Nathan`
-   3. Send another GET request
-      - `http localhost:8080/users`
+It's incredibly common to want to get more granular data, meaning finding a single user by ID, rather than asking for the entire list and digging yourself. To handle this, most webserver frameworks provide **route parameters**, defined in the route string as colon-variable-name (e.g. `:id`). Let's expand on our previous example using route params.
+
+1. Copy everything from `08` into a new `09` folder
+2. Define a `getUser` request handler function that will use the `req.params.id` to look up the user on the global `users` object
+3. Attach the `getUser` function to `app.get("/users/:id", getUsers)`
 
 ### Note
 
@@ -158,16 +168,6 @@ Route design isn't an exact science, but one of the most common api routing desi
 
 I've opted for `text/plain` in this lesson so that we don't need to create JSON manually. `httpie` supports sending files instead of `--raw` so make a .json file, change the body parser to `json()` instead of `text()` and send a fancier request body.
 `httpie` sends POST requests as json by default, but supports other formats as well. Check out the `body-parser`'s other middlewares and try sending plain text & handling that.
-
-## 07 - Route Parameters
-
-Routing frameworks generally support _route params_ to help you as an engineer handle more requests dynamically. In our previous lesson we began storing users in an array data-structure, but so far we have no way of looking aa single user's data
-
-1. Create a new Polka app
-2. Handle requests to `/api/:name/:location`
-   1. Save the `name` and `location` fields from the `req.params` object in variables
-   2. Respond with the provided `name` and `location` fields
-3. Using `httpie` test your endpoint `/api/:name/:location` by replacing `:name` with your name and `:location` with your own.
 
 ## XX - Response Codes
 

@@ -35,6 +35,10 @@ app.post("/users", function (req, res) {
 app.get("/users", function (req, res) {
   res.end(USERS.toString());
 });
+app.get("/users/:id", function (req, res) {
+  console.log(req.params)
+  res.end()
+})
 
 /////////////// INITIALIZE ///////////////
 app.listen(8080, function mountNotification() {
