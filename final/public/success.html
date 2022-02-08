@@ -30,10 +30,7 @@
       form {
         display: grid;
         gap: 0.5rem;
-        grid-template-areas:
-          "label input"
-          "label input"
-          "submit submit";
+        grid-template-areas: "username";
         width: 250px;
         margin: 250px auto;
         border: 1px solid hsl(var(--shadow-color) / 0.34);
@@ -49,21 +46,12 @@
   </head>
   <body>
     <form action="/submit" method="post">
-      <label for="username">Username</label>
-      <input
-        type="email"
-        name="username"
-        id="username"
-        placeholder="user@email.com"
-      />
-      <label for="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="Password123"
-      />
-      <button type="submit">Submit</button>
+      <input type="email" id="user" disabled />
     </form>
+    <script>
+      const input = document.getElementById("user");
+      const email = new URLSearchParams(window.location.search)?.get("user");
+      input.value = email;
+    </script>
   </body>
 </html>
